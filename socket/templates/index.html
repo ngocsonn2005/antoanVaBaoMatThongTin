@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Secure Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card mt-5">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">🔒 Secure Chat</h3>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <div id="loginContainer" class="card-body">
+                        <h4 class="card-title text-center mb-4">Đăng nhập</h4>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Tên người dùng</label>
+                            <input type="text" class="form-control" id="username" required>
+                            <div id="usernameError" class="invalid-feedback"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keycode" class="form-label">Mã bí mật</label>
+                            <input type="password" class="form-control" id="keycode" required>
+                            <div id="keycodeError" class="invalid-feedback"></div>
+                        </div>
+                        <button id="loginBtn" class="btn btn-primary w-100">Đăng nhập</button>
+                    </div>
+                    
+                    <!-- Chat Interface -->
+                    <div id="chatContainer" class="card-body d-none">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Chat an toàn</h5>
+                            <button id="logoutBtn" class="btn btn-sm btn-danger">Đăng xuất</button>
+                        </div>
+                        <div class="mb-2">
+                            <span id="userBadge" class="badge bg-info"></span>
+                        </div>
+                        <div class="chat-box mb-3" id="chat"></div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="message" placeholder="Nhập tin nhắn...">
+                            <button id="sendBtn" class="btn btn-primary">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let currentUser = null;
+
+        // DOM Elements
+        const loginContainer = document.getElementById('loginContainer');
+        const chatContainer = document.getElementById('chatContainer');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const usernameInput = document.getElementById('username');
+        const keycodeInput = document.getElementById('keycode');
+        const messageInput = document.getElementById('message');
+        const chatBox = document.getElementById('chat');
+        const userBadge = document.getElementById('userBadge');
+
+        // Login Functionality
+        loginBtn.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const keycode = keycodeInput.value.trim();
+
+            if (!username || !keycode) {
+                alert('Vui lòng nhập đầy đủ thông tin!');
+                return;
+            }
+
+            socket.emit('login_attempt', { username, keycode });
+        });
+
+        // Logout Functionality
+        logoutBtn.addEventListener('click', () => {
+            socket.emit('logout', currentUser);
+            currentUser = null;
+            chatContainer.classList.add('d-none');
+            loginContainer.classList.remove('d-none');
+            chatBox.innerHTML = '';
+        });
+
+        // Send Message Functionality
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            if (!currentUser) return;
+            
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            socket.emit('send_message', {
+                username: currentUser.username,
+                keycode: currentUser.keycode,
+                message
+            });
+
+            messageInput.value = '';
+        }
+
+        // Socket Events
+        socket.on('login_success', (user) => {
+            currentUser = user;
+            userBadge.textContent = `Đang đăng nhập: ${user.username}`;
+            loginContainer.classList.add('d-none');
+            chatContainer.classList.remove('d-none');
+            usernameInput.value = '';
+            keycodeInput.value = '';
+        });
+
+        socket.on('login_error', (error) => {
+            alert(`Lỗi đăng nhập: ${error}`);
+        });
+
+        socket.on('receive_message', (data) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            
+            const time = new Date().toLocaleTimeString();
+            messageElement.innerHTML = `
+                <span class="message-user">${data.username}</span>
+                <span class="message-time">${time}</span>
+                <div class="message-content">${data.message}</div>
+            `;
+            
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        socket.on('user_disconnected', (username) => {
+            const notification = document.createElement('div');
+            notification.classList.add('text-center', 'text-muted', 'mb-2');
+            notification.textContent = `${username} đã rời khỏi cuộc trò chuyện`;
+            chatBox.appendChild(notification);
+        });
+    </script>
+</body>
+</html>
