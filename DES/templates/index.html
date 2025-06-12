@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>DES - Mã hóa / Giải mã File</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header text-center bg-primary text-white">
+            <h3>🔐 Mã hóa / Giải mã File bằng DES</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">📁 Chọn file</label>
+                    <input type="file" class="form-control" name="file" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">🔑 Nhập khóa (8 ký tự)</label>
+                    <input type="text" class="form-control" name="key" maxlength="8" required>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" name="action" value="encrypt" class="btn btn-success w-45">Mã hóa</button>
+                    <button type="submit" name="action" value="decrypt" class="btn btn-warning w-45">Giải mã</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
