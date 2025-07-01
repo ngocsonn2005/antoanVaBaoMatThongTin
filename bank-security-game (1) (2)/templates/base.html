@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Security Game</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="bg-gradient-to-br from-blue-900 to-purple-900 text-white min-h-screen">
+    <!-- Floating particles background -->
+    <div id="particles-js" class="fixed inset-0 z-0"></div>
+    
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-pink-500">
+                <i class="fas fa-lock mr-2"></i>Bank Security Game
+            </h1>
+            <div class="flex items-center space-x-4">
+                <div class="bg-indigo-700 px-4 py-2 rounded-full shadow-lg">
+                    <i class="fas fa-trophy mr-2 text-yellow-300"></i>
+                    <span id="score-display">{{ player.score }}</span> điểm
+                </div>
+                <div class="bg-purple-700 px-4 py-2 rounded-full shadow-lg">
+                    <i class="fas fa-level-up-alt mr-2 text-green-300"></i>
+                    Cấp <span id="level-display">{{ player.level }}</span>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main content -->
+        <main class="bg-white/10 backdrop-blur-md rounded-xl shadow-2xl p-6 animate__animated animate__fadeIn">
+            {% block content %}{% endblock %}
+        </main>
+        
+        <!-- Feedback toast -->
+        <div id="feedback-toast" class="fixed bottom-4 right-4 hidden">
+            <div class="bg-white text-gray-800 px-6 py-3 rounded-lg shadow-xl font-medium flex items-center">
+                <i id="toast-icon" class="fas mr-3"></i>
+                <span id="toast-message"></span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

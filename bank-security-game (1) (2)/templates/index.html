@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h2 class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+        Chào mừng đến với Trò chơi Bảo mật Ngân hàng!
+    </h2>
+    
+    <div class="max-w-3xl mx-auto bg-indigo-900/50 rounded-xl p-6 mb-8 border border-indigo-400/30">
+        <h3 class="text-2xl font-semibold mb-4 text-yellow-300">
+            <i class="fas fa-book-open mr-2"></i>Cốt truyện
+        </h3>
+        <p class="text-lg mb-6 text-left">
+            Bạn là quản trị viên bảo mật của ngân hàng. Mỗi ngày, ngân hàng nhận nhiều giao dịch từ khách hàng. 
+            Nhiệm vụ của bạn là bảo vệ từng giao dịch bằng 3 bước: mã hóa (AES), xác thực (RSA) và kiểm tra tính toàn vẹn (SHA).
+            Càng lên cấp, số lượng và độ phức tạp giao dịch tăng lên!
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <!-- Level 1 Card -->
+            <div class="bg-gradient-to-br from-green-600 to-blue-600 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <div class="text-5xl mb-4 text-yellow-300">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">Cấp độ 1</h4>
+                <p class="text-sm mb-4">Giao dịch đơn giản, số tiền nhỏ, thông tin dễ dàng</p>
+                <button onclick="startGame(1)" class="bg-white text-green-700 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition">
+                    Bắt đầu <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            
+            <!-- Level 2 Card -->
+            <div class="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <div class="text-5xl mb-4 text-yellow-300">
+                    <i class="fas fa-star"></i><i class="fas fa-star-half-alt "></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">Cấp độ 2</h4>
+                <p class="text-sm mb-4">Nhiều giao dịch hơn, số tiền lớn hơn, khóa AES dài hơn </p>
+                <button onclick="startGame(2)" class="bg-white text-yellow-700 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition">
+                    Bắt đầu <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            
+            <!-- Level 3 Card -->
+            <div class="bg-gradient-to-br from-red-600 to-purple-600 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <div class="text-5xl mb-4 text-yellow-300">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">Cấp độ 3</h4>
+                <p class="text-sm mb-4">Giao dịch phức tạp, xác thực và kiểm tra toàn vẹn chặt chẽ</p>
+                <button onclick="startGame(3)" class="bg-white text-red-700 px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition">
+                    Bắt đầu <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function startGame(level) {
+    fetch('/start-game', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `level=${level}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            window.location.href = data.redirect;
+        }
+    });
+}
+</script>
+{% endblock %}

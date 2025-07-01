@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chiến thắng!</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding-top: 80px;
+            overflow-x: hidden;
+        }
+        .box {
+            background-color: rgba(0, 0, 0, 0.25);
+            padding: 50px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 0 20px #fff;
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: bounce 1.2s infinite;
+        }
+        p {
+            font-size: 24px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background-color: #00c853;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            background-color: #1de9b6;
+            transform: scale(1.1);
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🎉 CHÚC MỪNG!</h1>
+        <p>Bạn đã hoàn thành tất cả các cấp độ của trò chơi.</p>
+        <p>🔥 Bạn đã hoàn thành cấp độ! Bạn là chuyên gia bảo mật thực thụ!</p>
+        <p>🎯 Tổng điểm: <strong>{{ player.score }}</strong></p>
+        <a href="/">🔁 Chơi lại</a>
+        <a href="/next-game" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold inline-block mt-4">
+  ▶️ Tiếp theo
+</a>
+
+    </div>
+
+    <!-- Âm thanh chiến thắng -->
+    <audio autoplay>
+        <source src="static/images/Am-thanh-tieng-vo-tay-PewPew.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phát âm thanh.
+    </audio>
+
+    <!-- Pháo hoa -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        confetti({
+            particleCount: 200,
+            spread: 90,
+            origin: { y: 0.6 }
+        });
+    </script>
+</body>
+</html>
